@@ -103,11 +103,10 @@ const removeColumnMatches = (matches, grid) => {
       console.log('row of rows:', row);
       const coords = [row, column];
       addMatchClass(coords);
+
       setTimeout(() => {
         clearCell(coords, grid);
-        if (isLastRow(row, rows[0])) {
-          fillEmptyCell(coords, grid);
-        }
+        fillEmptyCell(coords, grid);
         removeMatchClass(coords);
       }, 2000);
     }

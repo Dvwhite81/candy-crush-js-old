@@ -19,21 +19,18 @@ const gameSetup = () => {
 const handleMatches = () => {
   const { rowMatches, columnMatches } = getGridMatches(grid);
 
-  if (/*rowMatches.length === 0 && */ columnMatches.length === 0) {
+  if (rowMatches.length === 0 && columnMatches.length === 0) {
     console.log('NO MATCHES');
     startMove();
   } else {
-    /*
     if (rowMatches.length > 0) {
       removeRowMatches(rowMatches, grid);
     }
-    */
 
     if (columnMatches.length > 0) {
       removeColumnMatches(columnMatches, grid);
     }
 
-    console.log('grid after removing matches:', grid);
     setTimeout(() => {
       convertGridToBoard(grid);
       handleMatches();

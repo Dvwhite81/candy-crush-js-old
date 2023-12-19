@@ -38,6 +38,12 @@ const fillEmptyCell = (coords, grid) => {
     console.log('fillEmptyCell cellAbove:', cellAbove);
     if (cellAbove === '') {
       console.log('above is empty');
+      const { nextFilled, emptyCells } = getEmptyColumnCells(grid, i, j);
+      console.log('next:', nextFilled);
+      console.log('emptyCells:', emptyCells);
+      if (nextFilled) {
+        grid[i][j] = nextFilled;
+      }
     } else {
       grid[i][j] = grid[i - 1][j];
     }
@@ -46,6 +52,25 @@ const fillEmptyCell = (coords, grid) => {
   const newCandy = getRandomCell();
   console.log('newCandy:', newCandy);
   grid[i][j] = newCandy;
+};
+
+const getEmptyColumnCells = (grid, i, j) => {
+  const emptyCells = [];
+  let nextFilled;
+
+  let k = i - 1;
+  while (grid[k][j] === '') {
+    emptyCells.push([k, j]);
+    k--;
+    if (k < 0) {
+      nextFilled = false;
+    }
+  }
+  nextFilled = grid[k][j];
+
+  console.log('getEmpty nextFilled:', nextFilled);
+  console.log('getEmpty emptyCells:', emptyCells);
+  return { nextFilled, emptyCells };
 };
 
 export { clearCell, fillEmptyCell, getRandomCell, getRandomGrid };
