@@ -1,90 +1,78 @@
+@font-face {
+  font-family: roboto;
+  src: url('../assets/fonts/Roboto-Medium.ttf');
+}
+
 :root {
-  --square-size: calc(10vh - 2px);
+  --board-size: 70vh;
+  --cell-size: calc(var(--board-size) / 8);
+  --candy-size: calc(var(--cell-size) * 0.8);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: roboto;
+  margin: 0;
+  padding: 0;
 }
 
 /* Main container */
 #container {
-	background-color: burlywood;
-	display: flex;
-	height: 100vh;
-	width: 100vw;
+  background-image: linear-gradient(to right, #fc4500, #ff8e01, #ff8e01, #fc4500);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
 }
 
-/* Start Modal and Skip Button */
-#open-modal-btn {
-  background-color: sienna;
-  border: none;
-  border-radius: 10px;
-  color: bisque;
-  cursor: pointer;
-  font-weight: bold;
-  left: 50%;
-  padding: 5px 10px;
-  position: absolute;
-  top: 0.5rem;
-  transform: translate(-50%, 0%);
+#header-container {
+  display: flex;
+  height: 15vh;
+  justify-content: space-around;
+  margin: 2rem auto;
+  width: var(--board-size);
 }
 
-#open-modal-btn:hover {
-  background-color: bisque;
-  color: sienna;
+.logo {
+  height: 100%;
 }
 
-#myModal {
-	background-color: sienna;
-  border-radius: 10px;
-  color: bisque;
-  display: none;
-  height: 50%;
-  left: 50%;
-  overflow: auto;
-  padding: 1rem;
-  position: fixed;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 50%;
-  z-index: 1;
+#score-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 5vh;
+  justify-content: center;
 }
 
-#modal-content {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	text-align: center;
-	width: 100%;
+#board {
+  background-color: cadetblue;
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  height: var(--board-size);
+  margin: auto;
+  width: var(--board-size);
 }
 
-#close-modal {
-	color: bisque;
-	font-size: 28px;
-	font-weight: bold;
-	position: absolute;
-	top: 0;
-	right: 5px;
+.cell {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: inset 10px 10px 10px 0px rgb(0 0 0 / 0.2);
+  display: flex;
 }
 
-#close-modal:hover,
-#close-modal:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
+.match {
+  background-color: white;
 }
 
-#modal-submit-btn {
-	background-color: bisque;
-  border: 1px solid bisque;
-	border-radius: 10px;
-	color: sienna;
-	cursor: pointer;
-	font-weight: bold;
-	margin: 0 auto;
-	padding: 5px 10px;
-	width: fit-content;
+.row-match.col-match {
+  background-color: gold;
 }
 
-#modal-submit-btn:hover {
-  background-color: sienna;
-  color: bisque;
+.candy {
+  height: var(--candy-size);
+  margin: auto;
+  width: var(--candy-size);
 }
-/* End Modal */
