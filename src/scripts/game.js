@@ -1,6 +1,6 @@
 import { convertGridToBoard, updateScore } from './dom-helpers';
 import { getRandomGrid } from './grid-helpers';
-import { getGridMatches } from './match-helpers';
+import { getGridMatches, removeColumnMatches, removeRowMatches } from './match-helpers';
 
 let score;
 let grid;
@@ -17,11 +17,32 @@ const gameSetup = () => {
 };
 
 const handleMatches = () => {
-  const matches = getGridMatches(grid);
-  if (matches.length > 0) {
-    // deal with matches
-    console.log('Has Matches');
+  const { rowMatches, columnMatches } = getGridMatches(grid);
+
+  if (/*rowMatches.length === 0 && */ columnMatches.length === 0) {
+    console.log('NO MATCHES');
+    startMove();
+  } else {
+    /*
+    if (rowMatches.length > 0) {
+      removeRowMatches(rowMatches, grid);
+    }
+    */
+
+    if (columnMatches.length > 0) {
+      removeColumnMatches(columnMatches, grid);
+    }
+
+    console.log('grid after removing matches:', grid);
+    setTimeout(() => {
+      convertGridToBoard(grid);
+      handleMatches();
+    }, 2000);
   }
+};
+
+const startMove = () => {
+  console.log('START MOVE');
 };
 
 export { gameSetup };

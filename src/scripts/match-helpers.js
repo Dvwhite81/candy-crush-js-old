@@ -1,30 +1,41 @@
+import { addMatchClass, removeMatchClass } from './dom-helpers';
+import { clearCell, fillEmptyCell } from './grid-helpers';
+
 const getGridMatches = (grid) => {
-  const allMatches = [];
+  const rowMatches = [];
+  const columnMatches = [];
 
   let i = 0;
   while (i < grid.length) {
-    const row = grid[i];
-    // Might need i, j, isRow, count
-    const rowMatches = getArrMatches(row);
-    if (rowMatches.length > 0) {
-      // Might need an object with i, j, matches array
-      allMatches.push(rowMatches);
+    const matches = checkRows(grid, i);
+    if (matches.length > 0) {
+      rowMatches.push({ row: i, columns: matches });
     }
     i++;
   }
 
   let j = 0;
   while (j < grid[0].length) {
-    const column = getColumn(grid, j);
-    // Might need i, j, isRow, count
-    const columnMatches = getArrMatches(column);
-    if (columnMatches.length > 0) {
-      // Might need an object with i, j, matches array
-      allMatches.push(columnMatches);
+    const matches = checkColumns(grid, j);
+    if (matches.length > 0) {
+      columnMatches.push({ column: j, rows: matches });
     }
     j++;
   }
-  return allMatches;
+
+  return { rowMatches, columnMatches };
+};
+
+const checkRows = (grid, i) => {
+  const row = grid[i];
+  const matches = getArrMatches(row);
+  return matches.length > 0 ? matches : [];
+};
+
+const checkColumns = (grid, j) => {
+  const column = getColumn(grid, j);
+  const matches = getArrMatches(column);
+  return matches.length > 0 ? matches : [];
 };
 
 const getArrMatches = (arr) => {
@@ -43,7 +54,6 @@ const getArrMatches = (arr) => {
         currentMatch.push(next);
         next++;
       }
-      // Might need an object with i, j, matches array
       arrMatches.push(currentMatch);
       j = next;
     }
@@ -64,4 +74,48 @@ const getColumn = (grid, j) => {
   return result;
 };
 
-export { getGridMatches };
+const removeRowMatches = (matches, grid) => {
+  console.log('REMOVE ROW MATCHES:', matches);
+  for (const match of matches) {
+    const { row, columns } = match;
+    console.log('row:', row);
+    console.log('columns:', columns);
+    for (const column of columns[0]) {
+      console.log('column of columns:', column);
+      const coords = [row, column];
+      addMatchClass(coords);
+      setTimeout(() => {
+        clearCell(coords, grid);
+        fillEmptyCell(coords, grid);
+        removeMatchClass(coords);
+      }, 2000);
+    }
+  }
+};
+
+const removeColumnMatches = (matches, grid) => {
+  console.log('REMOVE COLUMN MATCHES:', matches);
+  for (const match of matches) {
+    const { column, rows } = match;
+    console.log('column:', column);
+    console.log('rows:', rows);
+    for (const row of rows[0]) {
+      console.log('row of rows:', row);
+      const coords = [row, column];
+      addMatchClass(coords);
+      setTimeout(() => {
+        clearCell(coords, grid);
+        if (isLastRow(row, rows[0])) {
+          fillEmptyCell(coords, grid);
+        }
+        removeMatchClass(coords);
+      }, 2000);
+    }
+  }
+};
+
+const isLastRow = (row, rows) => {
+  return rows.indexOf(row) === rows.length - 1;
+};
+
+export { getGridMatches, removeColumnMatches, removeRowMatches };
