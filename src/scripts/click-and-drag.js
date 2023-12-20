@@ -27,7 +27,7 @@ const addSquareListeners = (square) => {
 };
 
 const removeSquareListeners = () => {
-  const squares = document.querySelectorAll('.cell');
+  const squares = document.querySelectorAll('.square');
   for (const square of squares) {
     square.removeEventListener('click', movePiece);
     removeDragListeners(square);

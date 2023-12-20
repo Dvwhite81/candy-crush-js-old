@@ -27,154 +27,119 @@ import { buildElement } from './dom-setup';
 
 const pieces = ['B', 'G', 'O', 'P', 'R', 'Y'];
 
-const createCandyPiece = (cell) => {
-  let color;
-  let src;
+const getPieceColor = (cell) => {
+  switch (cell) {
+    case 'B' || 'blue-h' || 'blue-v' || 'blue-w': {
+      return 'blue';
+    }
+    case 'G' || 'green-h' || 'green-v' || 'green-w': {
+      return 'green';
+    }
+    case 'O' || 'orange-h' || 'orange-v' || 'orange-w': {
+      return 'orange';
+    }
+    case 'P' || 'purple-h' || 'purple-v' || 'purple-w': {
+      return 'purple';
+    }
+    case 'R' || 'red-h' || 'red-v' || 'red-w': {
+      return 'red';
+    }
+    case 'Y' || 'yellow-h' || 'yellow-v' || 'yellow-w': {
+      return 'yellow';
+    }
+    default: {
+      return;
+    }
+  }
+};
+
+const getPieceSrc = (cell) => {
   switch (cell) {
     case 'B': {
-      color = 'blue';
-      src = Blue;
-      break;
+      return Blue;
     }
     case 'G': {
-      color = 'green';
-      src = Green;
-      break;
+      return Green;
     }
     case 'O': {
-      color = 'orange';
-      src = Orange;
-      break;
+      return Orange;
     }
     case 'P': {
-      color = 'purple';
-      src = Purple;
-      break;
+      return Purple;
     }
     case 'R': {
-      color = 'red';
-      src = Red;
-      break;
+      return Red;
     }
     case 'Y': {
-      color = 'yellow';
-      src = Yellow;
-      break;
+      return Yellow;
     }
-    default: {
-      break;
-    }
-  }
-
-  return buildElement('img', { className: `candy candy-${color}`, src: src, alt: `candy-${color}` });
-};
-
-const createSpecialCandyPiece = (candyType) => {
-  let color;
-  let src;
-
-  switch (candyType) {
     case 'blue-h': {
-      color = 'blue';
-      src = BlueH;
-      break;
+      return BlueH;
     }
     case 'blue-v': {
-      color = 'blue';
-      src = BlueV;
-      break;
+      return BlueV;
     }
     case 'blue-w': {
-      color = 'blue';
-      src = BlueW;
-      break;
+      return BlueW;
     }
     case 'green-h': {
-      color = 'green';
-      src = GreenH;
-      break;
+      return GreenH;
     }
     case 'green-v': {
-      color = 'green';
-      src = GreenV;
-      break;
+      return GreenV;
     }
     case 'green-w': {
-      color = 'green';
-      src = GreenW;
-      break;
+      return GreenW;
     }
     case 'orange-h': {
-      color = 'orange';
-      src = OrangeH;
-      break;
+      return OrangeH;
     }
     case 'orange-v': {
-      color = 'orange';
-      src = OrangeV;
-      break;
+      return OrangeV;
     }
     case 'orange-w': {
-      color = 'orange';
-      src = OrangeW;
-      break;
+      return OrangeW;
     }
     case 'purple-h': {
-      color = 'purple';
-      src = PurpleH;
-      break;
+      return PurpleH;
     }
     case 'purple-v': {
-      color = 'purple';
-      src = PurpleV;
-      break;
+      return PurpleV;
     }
     case 'purple-w': {
-      color = 'purple';
-      src = PurpleW;
-      break;
+      return PurpleW;
     }
     case 'red-h': {
-      color = 'red';
-      src = RedH;
-      break;
+      return RedH;
     }
     case 'red-v': {
-      color = 'red';
-      src = RedV;
-      break;
+      return RedV;
     }
     case 'red-w': {
-      color = 'red';
-      src = RedW;
-      break;
+      return RedW;
     }
     case 'yellow-h': {
-      color = 'yellow';
-      src = YellowH;
-      break;
+      return YellowH;
     }
     case 'yellow-v': {
-      color = 'yellow';
-      src = YellowV;
-      break;
+      return YellowV;
     }
     case 'yellow-w': {
-      color = 'yellow';
-      src = YellowW;
-      break;
+      return YellowW;
     }
     case 'bomb': {
-      color = 'bomb';
-      src = Bomb;
-      break;
+      return Bomb;
     }
     default: {
-      break;
+      return;
     }
   }
+};
 
+const createCandyPiece = (cell) => {
+  const color = getPieceColor(cell);
+  const src = getPieceSrc(cell);
   return buildElement('img', { className: `candy candy-${color}`, src: src, alt: `candy-${color}` });
 };
 
-export { createCandyPiece, createSpecialCandyPiece, pieces };
+export { createCandyPiece, getPieceColor, getPieceSrc, pieces };

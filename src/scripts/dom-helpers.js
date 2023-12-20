@@ -9,36 +9,33 @@ const convertGridToBoard = (grid) => {
     for (let j = 0; j < 8; j++) {
       const gridCell = grid[i][j];
       const coords = [i, j];
-      const boardCell = document.querySelector(`[coords="${coords}"]`);
+      const boardSquare = document.querySelector(`[coords="${coords}"]`);
       const candyImg = createCandyPiece(gridCell);
-      boardCell.append(candyImg);
+      boardSquare.append(candyImg);
     }
   }
 };
 
 const clearBoard = () => {
-  console.log('clearBoard');
-  const cells = document.querySelectorAll('.cell');
-  for (const cell of cells) {
-    emptyBoardCell(cell);
+  const squares = document.querySelectorAll('.square');
+  for (const square of squares) {
+    emptyBoardSquare(square);
   }
 };
 
-const emptyBoardCell = (cell) => {
-  const { children } = cell;
+const emptyBoardSquare = (square) => {
+  const { children } = square;
   for (const child of children) {
     child.remove();
   }
 };
 
 const addMatchClass = (coords) => {
-  console.log('addMatchClass coords:', coords);
   const square = getSquareFromCoords(coords);
   square.classList.add('match');
 };
 
 const removeMatchClass = (coords) => {
-  console.log('removeMatchClass coords:', coords);
   const square = getSquareFromCoords(coords);
   square.classList.remove('match');
 };
@@ -59,16 +56,33 @@ const getCoordsFromSquare = (square) => {
 
 const getSquareFromCoords = (coords) => {
   const [i, j] = coords;
-  return document.querySelector(`#cell-${i}-${j}`);
+  return document.querySelector(`#square-${i}-${j}`);
+};
+
+const checkForMarkedSquare = (coords) => {
+  console.log('checkForMarkedSquare coords:', coords);
+  const square = getSquareFromCoords(coords);
+  if (square.classList.contains('special')) {
+    return { coords, square };
+  }
+  return false;
+};
+
+const markSquare = (coords, matchDirections) => {
+  const square = getSquareFromCoords(coords);
+  square.classList.add('special');
+  square.classList.add(matchDirections);
 };
 
 export {
   addMatchClass,
+  checkForMarkedSquare,
   convertGridToBoard,
   getCandyColor,
   getCandyFromSquare,
   getCoordsFromSquare,
   getSquareFromCoords,
+  markSquare,
   removeMatchClass,
   updateScore
 };

@@ -5,8 +5,8 @@
 
 :root {
   --board-size: 70vh;
-  --cell-size: calc(var(--board-size) / 8);
-  --candy-size: calc(var(--cell-size) * 0.8);
+  --square-size: calc(var(--board-size) / 8);
+  --candy-size: calc(var(--square-size) * 0.8);
 }
 
 * {
@@ -56,7 +56,7 @@
   width: var(--board-size);
 }
 
-.cell {
+.square {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   box-shadow: inset 10px 10px 10px 0px rgb(0 0 0 / 0.2);

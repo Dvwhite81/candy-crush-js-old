@@ -1,4 +1,7 @@
-import { pieces } from './piece-helpers';
+import { getMatchDirections } from './checking-helpers';
+import { markSquare } from './dom-helpers';
+import { getGridMatches } from './match-helpers';
+import { getPieceColor, pieces } from './piece-helpers';
 
 const getRandomCell = () => {
   const randomIndex = Math.floor(Math.random() * pieces.length);
@@ -16,41 +19,35 @@ const getRandomGrid = () => {
     grid.push(row);
   }
 
-  return grid;
+  return isValidStartingGrid(grid) ? grid : getRandomGrid();
+};
+
+const isValidStartingGrid = (grid) => {
+  const { rowMatches, columnMatches } = getGridMatches(grid);
+  return rowMatches.length === 0 && columnMatches.length === 0;
 };
 
 const clearCell = (coords, grid) => {
-  console.log('clearCell coords:', coords);
   const [i, j] = coords;
-  console.log('clearCell grid[i][j] before:', grid[i][j]);
   grid[i][j] = '';
-  console.log('clearCell grid[i][j] after:', grid[i][j]);
 };
 
 const fillEmptyCell = (coords, grid) => {
-  console.log('fillEmptyCell coords:', coords);
   let [i, j] = coords;
   while (i > 0) {
-    console.log('fillEmptyCell [i, j]:', [i, j]);
-    console.log('fillEmptyCell grid[i][j]:', grid[i][j]);
     const cellAbove = grid[i - 1][j];
-    console.log('fillEmptyCell grid[i - 1][j]:', grid[i - 1][j]);
-    console.log('fillEmptyCell cellAbove:', cellAbove);
     if (cellAbove === '') {
-      console.log('above is empty');
-      const { nextFilled, emptyCells } = getEmptyColumnCells(grid, i, j);
-      console.log('next:', nextFilled);
-      console.log('emptyCells:', emptyCells);
+      const { nextFilled } = getEmptyColumnCells(grid, i, j);
       if (nextFilled) {
         grid[i][j] = nextFilled;
       }
     } else {
       grid[i][j] = grid[i - 1][j];
     }
+    checkForNewMatch(i, j, grid);
     i--;
   }
   const newCandy = getRandomCell();
-  console.log('newCandy:', newCandy);
   grid[i][j] = newCandy;
 };
 
@@ -67,10 +64,19 @@ const getEmptyColumnCells = (grid, i, j) => {
     }
   }
   nextFilled = grid[k][j];
-
-  console.log('getEmpty nextFilled:', nextFilled);
-  console.log('getEmpty emptyCells:', emptyCells);
   return { nextFilled, emptyCells };
+};
+
+const checkForNewMatch = (i, j, grid) => {
+  const gridCell = grid[i][j];
+  const color = getPieceColor(gridCell);
+  const coords = [i, j];
+
+  const matchDirections = getMatchDirections(color, coords);
+  console.log('checkForNewMatch matchDirections:', matchDirections);
+  if (matchDirections) {
+    markSquare(coords, matchDirections);
+  }
 };
 
 export { clearCell, fillEmptyCell, getRandomCell, getRandomGrid };

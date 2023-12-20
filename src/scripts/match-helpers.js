@@ -1,4 +1,4 @@
-import { addMatchClass, removeMatchClass } from './dom-helpers';
+import { addMatchClass, checkForMarkedSquare, removeMatchClass } from './dom-helpers';
 import { clearCell, fillEmptyCell } from './grid-helpers';
 
 const getGridMatches = (grid) => {
@@ -74,47 +74,68 @@ const getColumn = (grid, j) => {
   return result;
 };
 
-const removeRowMatches = (matches, grid) => {
-  console.log('REMOVE ROW MATCHES:', matches);
+const removeMatches = (matches, grid, isRow, time) => {
+  if (matches.length === 0) {
+    return;
+  }
+  if (isRow) {
+    removeRowMatches(matches, grid, isRow, time);
+  } else {
+    removeColumnMatches(matches, grid, isRow, time);
+  }
+};
+
+const removeRowMatches = (matches, grid, isRow, time) => {
   for (const match of matches) {
     const { row, columns } = match;
-    console.log('row:', row);
-    console.log('columns:', columns);
+    const { length } = columns[0];
+
     for (const column of columns[0]) {
-      console.log('column of columns:', column);
       const coords = [row, column];
-      addMatchClass(coords);
-      setTimeout(() => {
-        clearCell(coords, grid);
-        fillEmptyCell(coords, grid);
-        removeMatchClass(coords);
-      }, 2000);
+      replaceMatchedCells(match, length, coords, grid, isRow, time);
     }
   }
 };
 
-const removeColumnMatches = (matches, grid) => {
-  console.log('REMOVE COLUMN MATCHES:', matches);
+const removeColumnMatches = (matches, grid, isRow, time) => {
   for (const match of matches) {
     const { column, rows } = match;
-    console.log('column:', column);
-    console.log('rows:', rows);
-    for (const row of rows[0]) {
-      console.log('row of rows:', row);
-      const coords = [row, column];
-      addMatchClass(coords);
+    const { length } = rows[0];
 
-      setTimeout(() => {
-        clearCell(coords, grid);
-        fillEmptyCell(coords, grid);
-        removeMatchClass(coords);
-      }, 2000);
+    for (const row of rows[0]) {
+      const coords = [row, column];
+      replaceMatchedCells(match, length, coords, grid, isRow, time);
     }
   }
 };
 
-const isLastRow = (row, rows) => {
-  return rows.indexOf(row) === rows.length - 1;
+const replaceMatchedCells = (match, length, coords, grid, isRow, time) => {
+  addMatchClass(coords);
+
+  checkForSpecials(match, coords, length, isRow);
+
+  setTimeout(() => {
+    clearCell(coords, grid);
+    fillEmptyCell(coords, grid);
+    removeMatchClass(coords);
+  }, time);
 };
 
-export { getGridMatches, removeColumnMatches, removeRowMatches };
+const checkForSpecials = (match, coords, length, isRow) => {
+  // If length is 5 and in a row or column - BOMB
+  // 5 in T or L - WRAPPED
+  // 4 in row - VERTICAL STRIPE
+  // 4 in col - HORIZONTAL STRIPE
+  if (!checkForMarkedSquare(coords)) {
+    handleMarkingSquares(match, coords, length, isRow);
+  }
+};
+
+const handleMarkingSquares = (match, coords, length, isRow) => {
+  console.log('handleMarkingSquares match:', match);
+  console.log('handleMarkingSquares coords:', coords);
+  console.log('handleMarkingSquares length:', length);
+  console.log('handleMarkingSquares isRow:', isRow);
+};
+
+export { getGridMatches, removeMatches };
